@@ -1,2 +1,4 @@
 Bin/x64/*
 !Bin/x64/Insert\ binaries\ here
+!Bin/x64/PrebuildCheck.bat
+!Bin/x64/PostbuildCopy.bat
