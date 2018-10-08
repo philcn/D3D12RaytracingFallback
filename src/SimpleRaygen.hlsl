@@ -8,11 +8,18 @@
 // PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 //
 //*********************************************************
-#pragma once
-#define ENABLE_UAV_LOG 0
+#include "Validate.hlsli"
 
-// Set to 1 to visualize acceleration structure. 
-// Since this writes to a raytracing output during ray traversal, 
-// the Fallback Layer must have an output that is used by the application defined and
-// an application shaders must disable writing to the output (i.e. in a miss/hit shaders).
-#define ENABLE_ACCELERATION_STRUCTURE_VISUALIZATION 0
+RaytracingAccelerationStructure AS : register(t0);
+
+[shader("raygeneration")]
+void raygen()
+{
+    EmptyPayload payload = { 0 };
+    RayDesc ray = { 
+        float3(1, 0, 0),
+        0.0f,
+        float3(1, 0, 0),
+        0.0f };
+    TraceRay(AS, 0, ~0, 0, 1, 0, ray, payload);
+}

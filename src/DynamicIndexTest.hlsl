@@ -8,11 +8,15 @@
 // PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 //
 //*********************************************************
-#pragma once
-#define ENABLE_UAV_LOG 0
+Buffer inputBuffers[] : register(t0);
 
-// Set to 1 to visualize acceleration structure. 
-// Since this writes to a raytracing output during ray traversal, 
-// the Fallback Layer must have an output that is used by the application defined and
-// an application shaders must disable writing to the output (i.e. in a miss/hit shaders).
-#define ENABLE_ACCELERATION_STRUCTURE_VISUALIZATION 0
+RWByteAddressBuffer outputBuffer : register(u0);
+
+[numthreads(1, 1, 1)]
+void main(uint3 DTid : SV_DispatchThreadID)
+{
+    for (uint i = 0; i < 3; i++)
+    {
+        outputBuffer.Store4(i * 16, asuint(inputBuffers[i].Load(0)));
+    }
+}
